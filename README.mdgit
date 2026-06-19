@@ -1,0 +1,1 @@
+"# belajar_laravel"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/kentang25/belajar_laravel.gitgit push -u origin main
