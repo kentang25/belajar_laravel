@@ -8,3 +8,6 @@ Route::get('/', function () {
 });
 
 Route::get('/post', [PostController::class, 'index']);
+
+Route::get('/post/{post:slug}', [PostController::class, 'detail'])->name('detail');
+Route::get('/authors/{user:name}', [PostController::class, 'authors'])->name('posts');
