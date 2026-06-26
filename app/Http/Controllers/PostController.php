@@ -4,13 +4,19 @@
 
     use App\Models\Post;
     use App\Models\User;
+    use App\Models\Category;
+    use Illuminate\Validation\Validator;
+    use Illuminate\Http\Request;
 
     Class PostController extends Controller {
         public function index()
         {
-            return view('post', [
-                'posts' => Post::all()
-            ]);
+            
+            $posts = Post::with(['category', 'author'])->filter(request(['category', 'author', 'search']))->latest()->paginate(6)->withQueryString();
+            return view('post', compact('posts')); 
+            // return view('post', [
+            //     // 'posts' => Post::filter(request(['search', 'category', 'author']))->latest()->paginate(5)->get()
+            // ]);
         }
 
         public function detail(Post $post)
@@ -28,6 +34,46 @@
                 'author'    => $user->posts
             ]);
         }
+
+        public function categories(Category $category)
+        {
+            return view('category', [
+                'title' => $category->name,
+                'category' => $category->posts
+            ]);
+        }
+
+        public function inputForm()
+        {
+            return view('input', [
+                'authors' => User::all(),
+                'categories' => Category::all()
+            ]);
+        }
+
+        public function insertData(Request $request)
+        {
+            $validated = $request->validate([
+                'title'     => 'required|max:225',
+                'slug'      => 'required|unique:posts',
+                'content'   => 'required',
+                'author_id' => 'required|exists:users,id',
+                'category_id'   => 'required|exists:categories,id'
+            ]);
+
+            // dd($validated);
+
+            Post::create($validated);
+
+            return redirect('/post')->with('succes', 'berhasil menambahkan data');
+        }
+
+        // public function update(Category $category, User $user)
+        // {
+        //     return view('update',[
+                
+        //     ])
+        // }
     }
 
 ?>
