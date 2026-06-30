@@ -1,6 +1,6 @@
 <x-layout>
     <div class="mx-auto py-4 px-10">
-        <form action="/insert" method="Post">
+        <form action="/admin/insert" method="Post">
             <label class="block">Title :</label>
             <input type="text" name="title" class="border p-2 rounded-lg mt-2">
     

@@ -43,37 +43,27 @@
             ]);
         }
 
-        public function inputForm()
+        
+
+        public function edit(Post $post)
         {
-            return view('input', [
-                'authors' => User::all(),
-                'categories' => Category::all()
-            ]);
+            return view('edit', compact('post'));
         }
 
-        public function insertData(Request $request)
+        public function update(Request $request, Post $post)
         {
-            $validated = $request->validate([
-                'title'     => 'required|max:225',
-                'slug'      => 'required|unique:posts',
+            $validated = request->validate([
+                'title'     => 'required',
+                'slug'      => 'required|unique:posts:slug'. $post->id,
                 'content'   => 'required',
-                'author_id' => 'required|exists:users,id',
-                'category_id'   => 'required|exists:categories,id'
+                'author_id'    => 'required|exists:users,id',
+                'category_id'  => 'required|exists:categories,id'
             ]);
 
-            // dd($validated);
+            $post->update($validated);
 
-            Post::create($validated);
-
-            return redirect('/post')->with('succes', 'berhasil menambahkan data');
+            return redirect('/post');
         }
-
-        // public function update(Category $category, User $user)
-        // {
-        //     return view('update',[
-                
-        //     ])
-        // }
     }
 
 ?>
